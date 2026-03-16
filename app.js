@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const objects = document.querySelectorAll('.floating-object');
         const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
         const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-        
+
         objects.forEach((obj, idx) => {
             const factor = (idx + 1) * 2;
             obj.style.transform = `translate(${moveX * factor}px, ${moveY * factor}px) rotate(${15 + moveX}deg)`;
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.addEventListener('hashchange', router);
-    router(); 
+    router();
 
     // --- 렌더링 함수들 ---
 
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const formData = new FormData(e.target);
             const tags = formData.get('tags').split(',').map(t => t.trim()).filter(t => t !== '');
-            
+
             SITE_DATA.feedbacks.push({
                 id: SITE_DATA.feedbacks.length + 1,
                 question: formData.get('question'),
