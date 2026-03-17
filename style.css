@@ -56,8 +56,8 @@ h1, h2, h3 {
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.5rem;
-    mix-blend-mode: difference;
-    color: white; /* 로고는 반전 효과 유지 */
+    color: #000; /* 검은색으로 다시 복구 */
+    mix-blend-mode: normal; /* 반전 효과 제거하여 확실히 보이게 함 */
 }
 
 .nav-links {
