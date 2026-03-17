@@ -129,12 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="section-container" id="features">
-                <div class="grid">
+                <div class="info-grid">
                     ${SITE_DATA.hero.features.map(f => `
-                        <div class="card feature-card" style="--shadow-color: ${picker.getNext()}">
-                            <span class="card-tag">Feature 0${f.id}</span>
-                            <h3>${f.title}</h3>
-                            <p>${f.desc}</p>
+                        <div class="info-block">
+                            <span class="info-number">0${f.id}</span>
+                            <div class="info-text">
+                                <h3>${f.title}</h3>
+                                <p>${f.desc}</p>
+                            </div>
                         </div>
                     `).join('')}
                 </div>
