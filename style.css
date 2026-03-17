@@ -86,6 +86,7 @@ h1, h2, h3 {
     border: 1px solid #000;
     background: #fff;
     color: #000;
+    mix-blend-mode: normal; /* 상위 요소의 difference 모드로 인한 반전 방지 */
 }
 
 main {
