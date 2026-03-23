@@ -667,10 +667,35 @@ main {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Group Buy Styles */
+.groupbuy-form {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.groupbuy-form:focus-within {
+    transform: translateY(-5px);
+    box-shadow: 15px 15px 0px #000;
+}
+
+.groupbuy-card {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.groupbuy-card:hover {
+    transform: translateY(-10px) rotate(1deg);
+}
+
+.groupbuy-card .btn-tag:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 15px rgba(254, 229, 0, 0.4);
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .hero-title { font-size: 4rem; }
     .nav-links { display: none; }
     .materials-board { grid-template-columns: 1fr; }
     .sub-category-tabs { flex-direction: column; align-items: flex-start; }
+    .price-row { grid-template-columns: 1fr 1fr !important; gap: 10px; }
+    .groupbuy-form { padding: 1.5rem !important; }
 }

@@ -9,9 +9,9 @@ const SITE_DATA = {
         title: "서울 미대생의\n작업 생존 플랫폼",
         description: "작업 중 필요한 것들을 빠르게 찾고, 묻고, 참고할 수 있는 시각디자인 전공자 전용 커뮤니티형 플랫폼입니다.",
         features: [
-            { id: 1, title: "재료 구하기", desc: "급하게 필요한 재료를 근처에서 찾으세요." },
-            { id: 2, title: "빠른 피드백", desc: "고민 중인 시안에 대한 반응을 확인하세요." },
-            { id: 3, title: "디자인 스팟", desc: "서울의 유용한 작업 공간과 인쇄소를 공유합니다." }
+            { id: 1, title: "재료 구하기", desc: "작업 유형별로 급하게 필요한 재료를 찾으세요." },
+            { id: 2, title: "가격 비교", desc: "화방별 재료 가격을 비교하고 최저가를 공유하세요." },
+            { id: 3, title: "공동구매", desc: "함께 모여 재료를 더 저렴하게 구매하세요." }
         ]
     },
 
@@ -49,67 +49,62 @@ const SITE_DATA = {
         }
     ],
 
-    // 피드백 데이터 (Feedback)
-    feedbacks: [
+    // 재료별 가격 비교 데이터 (Price Comparison)
+    priceComparisons: [
         {
             id: 1,
-            image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop",
-            question: "포스터 타이포 배치 1안과 2안 중 뭐가 나은가요?",
-            tags: ["1안 좋아요", "2안 좋아요", "수정 필요"],
-            comments: 5,
-            author: "최시각"
+            itemName: "신한 아크릴 물감 50ml",
+            price: "4,500원",
+            storeName: "호미화방 (홍대)",
+            hasReceipt: true,
+            date: "2024.03.20"
         },
         {
             id: 2,
-            image: "https://images.unsplash.com/photo-1541462608141-ad60397d4573?q=80&w=800&auto=format&fit=crop",
-            question: "브랜딩 컬러 조합 어떤가요?",
-            tags: ["컬러 좋음", "가독성 좋음", "대비 부족"],
-            comments: 3,
-            author: "한편집"
-        }
-    ],
-
-    // 서울 디자인 장소 데이터 (Seoul Spots)
-    spots: [
-        {
-            id: 1,
-            name: "방산시장",
-            location: "을지로",
-            category: "재료상가",
-            note: "각종 종이와 패키지 재료의 천국. 토요일은 일찍 닫아요.",
-            coords: { x: 58, y: 35 } // 강북
-        },
-        {
-            id: 2,
-            name: "충무로 인쇄골목",
-            location: "충무로",
-            category: "인쇄출력",
-            note: "포트폴리오 인쇄부터 대형 출력까지. 단골집 하나 만들면 편함.",
-            coords: { x: 52, y: 48 } // 남산 근처
+            itemName: "신한 아크릴 물감 50ml",
+            price: "4,200원",
+            storeName: "미림화방 (신촌)",
+            hasReceipt: true,
+            date: "2024.03.21"
         },
         {
             id: 3,
-            name: "포스트 포에틱스",
-            location: "한남동",
-            category: "디자인서점",
-            note: "해외 디자인 서적과 매거진 큐레이션이 훌륭함.",
-            coords: { x: 62, y: 62 } // 한강변
+            itemName: "폼보드 5T A1",
+            price: "3,800원",
+            storeName: "삼원특수지 (혜화)",
+            hasReceipt: false,
+            date: "2024.03.18"
+        }
+    ],
+
+    // 공동구매 데이터 (Group Buy)
+    groupBuys: [
+        {
+            id: 1,
+            itemName: "신한 전문가용 과슈 24색",
+            targetPrice: "45,000원",
+            minParticipants: 10,
+            currentParticipants: 7,
+            chatLink: "https://open.kakao.com/o/g123456",
+            status: "모집 중"
         },
         {
-            id: 4,
-            name: "LCDC SEOUL",
-            location: "성수",
-            category: "전시/복합공간",
-            note: "영감을 주는 소품샵과 전시 공간이 많음.",
-            coords: { x: 78, y: 45 } // 강북/강변
+            id: 2,
+            itemName: "삼원특수지 롤지 (화이트)",
+            targetPrice: "12,000원",
+            minParticipants: 5,
+            currentParticipants: 3,
+            chatLink: "https://open.kakao.com/o/g789012",
+            status: "모집 중"
         },
         {
-            id: 5,
-            name: "땡스북스",
-            location: "홍대",
-            category: "디자인서점",
-            note: "동네 서점 분위기의 편안한 디자인 서점.",
-            coords: { x: 25, y: 40 } // 서쪽 강북
+            id: 3,
+            itemName: "아크릴 판 3mm 900x600",
+            targetPrice: "8,500원",
+            minParticipants: 20,
+            currentParticipants: 20,
+            chatLink: "https://open.kakao.com/o/g345678",
+            status: "모집 완료"
         }
     ],
 

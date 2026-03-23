@@ -79,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (hash === '#material') {
             renderMaterial();
         } else if (hash === '#feedback') {
-            renderFeedback();
+            renderPriceComparison();
         } else if (hash === '#seoulspots') {
-            renderSeoulSpots();
+            renderGroupBuy();
         } else if (hash.startsWith('#detail/')) {
             const id = hash.split('/')[1];
             renderDetail(id);
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         section.innerHTML = `
-            <h2 class="display-title">Material / 재료 구하기</h2>
+            <h2 class="display-title">재료 구하기 / Buy Material</h2>
             <p>1단계 작업 유형을 선택하면 2단계 긴급도 필터가 나타납니다.</p>
             
             <!-- 1단계 상위 카테고리 -->
@@ -239,215 +239,187 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMaterial();
     };
 
-    function renderFeedback() {
+    function renderPriceComparison() {
         const picker = new ColorPicker(SITE_DATA.colors);
         const section = document.createElement('section');
         section.className = 'section-container';
 
-        const feedbackObjectSets = [
-            ['poster', 'clip', 'stickers'],
-            ['paint', 'brush', 'spray']
-        ];
-
         section.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
-                <div>
-                    <h2 class="display-title">Feedback / 빠른 피드백</h2>
-                    <p>시안에 대한 동료들의 직관적인 반응을 확인하세요.</p>
-                </div>
-                <button class="btn-tag" onclick="window.openFeedbackModal()" style="padding: 10px 20px; font-size: 0.9rem; cursor: pointer;">+ 신규 질문 등록하기</button>
+            <div style="margin-bottom: 3rem;">
+                <h2 class="display-title">재료별 가격 비교 / Price Watch</h2>
+                <p>가까운 화방에서 산 재료의 가격을 공유하고 최저가를 찾아보세요.</p>
             </div>
             
-            <div class="grid">
-                ${SITE_DATA.feedbacks.map((f, idx) => `
-                    <div class="card feedback-card" style="--shadow-color: ${picker.getNext()}">
-                        <div class="feedback-visual-area" style="width: 100%; height: 250px; background: #f9f9f9; margin-bottom: 1rem; position: relative; overflow: hidden; border: 1px solid #eee; display: flex; align-items: center; justify-content: center;">
-                            ${(feedbackObjectSets[idx] || ['poster', 'brushes', 'paint']).map((objType, objIdx) => `
-                                <div class="contained-object animate-float" style="width: ${objType === 'poster' ? '100px' : '60px'}; position: absolute; animation-delay: -${objIdx * 1.5}s; ${objIdx === 0 ? 'top: 20%; left: 20%;' : objIdx === 1 ? 'bottom: 20%; right: 20%;' : 'top: 50%; left: 50%; transform: translate(-50%, -50%);'}">
-                                    ${getGraphicObject(objType)}
-                                </div>
-                            `).join('')}
-                        </div>
-                        <h3>${f.question}</h3>
-                        <div class="tags-row" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 8px;">
-                            ${f.tags.map(t => `
-                                <button class="btn-tag" onclick="this.classList.toggle('active')" style="border: 1px solid #000; padding: 6px 12px; background: none; cursor: pointer; font-size: 0.75rem; font-weight: 500; transition: all 0.2s;">${t}</button>
-                            `).join('')}
-                        </div>
-                        <div style="margin-top: 1.5rem; font-size: 0.8rem; border-top: 1px dashed #ccc; padding-top: 10px;">
-                            <strong>${f.author}</strong> · 댓글 ${f.comments}개
-                        </div>
+            <!-- 입력 폼 섹션 -->
+            <div class="price-input-form" style="background: #f8f8f8; padding: 2rem; border-radius: 12px; border-left: 8px solid #000; margin-bottom: 4rem;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.2rem;">새로운 가격 정보 등록</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 1.5rem;">
+                    <div class="form-group">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px;">재료 이름</label>
+                        <input type="text" id="pc-item" placeholder="예: 신한 아크릴 50ml" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                     </div>
-                `).join('')}
-                
-                <!-- 피드백 추가 카드 -->
-                <div class="add-card" onclick="window.openFeedbackModal()" style="--shadow-color: #ddd">
-                    <div class="plus-icon">+</div>
-                    <span>ASK FOR FEEDBACK</span>
+                    <div class="form-group">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px;">가격 (원)</label>
+                        <input type="text" id="pc-price" placeholder="예: 4,500" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 5px;">가게 이름</label>
+                        <input type="text" id="pc-store" placeholder="예: 호미화방 (홍대)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <button class="btn-tag" onclick="alert('준비 중인 기능입니다: 영수증 이미지를 선택하세요.')" style="background: #fff; border: 1px dashed #000; padding: 10px 15px; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <span>📷 영수증 사진 첨부</span>
+                    </button>
+                    <button class="btn-tag active" onclick="window.addPriceComparison()" style="background: #000; color: #fff; padding: 12px 30px; font-weight: 800; cursor: pointer;">정보 등록하기</button>
                 </div>
             </div>
+
+            <!-- 리스트 섹션 -->
+            <div class="comparison-list">
+                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 1rem; background: #000; color: #fff; font-size: 0.8rem; font-weight: 800; border-radius: 4px; margin-bottom: 10px;">
+                    <span>재료명</span>
+                    <span>가격</span>
+                    <span>가게</span>
+                    <span>영수증 여부</span>
+                </div>
+                ${SITE_DATA.priceComparisons.map(pc => `
+                    <div class="price-row" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; padding: 1.2rem; border-bottom: 1px solid #eee; align-items: center; transition: background 0.2s;">
+                        <span style="font-weight: 700;">${pc.itemName}</span>
+                        <span style="color: #FF3E00; font-weight: 800;">${pc.price}</span>
+                        <span style="color: #666;">${pc.storeName}</span>
+                        <span>${pc.hasReceipt ? '✅ 첨부됨' : '❌ 없음'}</span>
+                    </div>
+                `).join('')}
+            </div>
         `;
+        app.innerHTML = ''; 
         app.appendChild(section);
     }
 
-    // 피드백 등록 모달 열기
-    window.openFeedbackModal = () => {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.id = 'feedback-modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-close" onclick="window.closeFeedbackModal()">&times;</div>
-                <h2 class="display-title" style="font-size: 1.5rem; margin-bottom: 2rem;">New Question / 질문</h2>
-                <form id="feedback-form">
-                    <div class="form-group">
-                        <label>질문 내용</label>
-                        <textarea name="question" rows="3" placeholder="예: 이 로고의 서체가 전체적인 분위기와 어울리나요?" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>피드백 키워드 (쉼표로 구분)</label>
-                        <input type="text" name="tags" placeholder="예: 어울림, 가독성 좋음, 수정 필요">
-                    </div>
-                    <div class="form-group">
-                        <label>작성자</label>
-                        <input type="text" name="author" placeholder="이름 또는 닉네임" required>
-                    </div>
-                    <p style="font-size: 0.7rem; color: #888; margin-bottom: 1.5rem;">* 시각물은 그래픽 오브제들로 자동 생성됩니다.</p>
-                    <button type="submit" class="btn-submit">질문 올리기</button>
-                </form>
-            </div>
-        `;
-        document.body.appendChild(modal);
+    window.addPriceComparison = () => {
+        const item = document.getElementById('pc-item').value;
+        const price = document.getElementById('pc-price').value;
+        const store = document.getElementById('pc-store').value;
 
-        document.getElementById('feedback-form').onsubmit = (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const tags = formData.get('tags').split(',').map(t => t.trim()).filter(t => t !== '');
+        if (!item || !price || !store) {
+            alert('모든 정보를 입력해주세요!');
+            return;
+        }
 
-            SITE_DATA.feedbacks.push({
-                id: SITE_DATA.feedbacks.length + 1,
-                question: formData.get('question'),
-                tags: tags.length > 0 ? tags : ["답변 대기"],
-                comments: 0,
-                author: formData.get('author')
-            });
-
-            window.closeFeedbackModal();
-            renderFeedback();
-            alert('새로운 피드백 요청이 등록되었습니다!');
+        const newEntry = {
+            id: Date.now(),
+            itemName: item,
+            price: price.includes('원') ? price : `${price}원`,
+            storeName: store,
+            hasReceipt: false,
+            date: new Date().toLocaleDateString()
         };
+
+        SITE_DATA.priceComparisons.unshift(newEntry);
+        renderPriceComparison();
+        alert('가격 정보가 등록되었습니다!');
     };
 
-    window.closeFeedbackModal = () => {
-        const modal = document.getElementById('feedback-modal');
-        if (modal) modal.remove();
-    };
-
-    function renderSeoulSpots() {
+    function renderGroupBuy() {
         const picker = new ColorPicker(SITE_DATA.colors);
         const section = document.createElement('section');
-        section.id = 'map-section';
-
-        const landmarks = [
-            { name: 'N Seoul Tower', x: 50, y: 40, icon: '🗼' },
-            { name: 'Lotte Tower', x: 80, y: 70, icon: '🏙️' },
-            { name: '63 Building', x: 35, y: 65, icon: '🏢' },
-            { name: 'Gyeongbokgung', x: 48, y: 25, icon: '🏯' }
-        ];
+        section.className = 'section-container';
 
         section.innerHTML = `
-            <div class="section-container" style="text-align: center;">
-                <h2 class="display-title">Seoul Spots / 지도</h2>
-                <p>서울 미대생들의 활동 반경을 한강과 랜드마크 중심으로 확인하세요.</p>
-                <button class="btn-tag" onclick="window.openSpotModal()" style="padding: 10px 20px; font-size: 0.9rem; cursor: pointer;">+ 신규 스팟 등록하기</button>
+            <div style="margin-bottom: 3rem; text-align: center;">
+                <h2 class="display-title">공동구매 / Group Buy</h2>
+                <p>필요한 재료를 함께 모여 더 저렴하게 구매하세요.</p>
             </div>
             
-            <div class="map-container">
-                <div class="map-guide-v"></div>
-                <div class="map-guide-h"></div>
-                <div class="quadrant-label" style="top: 5%; left: 50%; transform: translateX(-50%);">NORTH (강북)</div>
-                <div class="quadrant-label" style="bottom: 5%; left: 50%; transform: translateX(-50%);">SOUTH (강남)</div>
-                <div class="quadrant-label" style="left: 5%; top: 50%; transform: translateY(-50%);">WEST (강서)</div>
-                <div class="quadrant-label" style="right: 5%; top: 50%; transform: translateY(-50%);">EAST (강동)</div>
-                ${landmarks.map(l => `
-                    <div class="map-landmark" style="left: ${l.x}%; top: ${l.y}%;">
-                        <span style="font-size: 1.2rem;">${l.icon}</span>
-                        <span>${l.name}</span>
+            <!-- 공동구매 등록 폼 -->
+            <div class="groupbuy-form" style="background: #fff; padding: 2.5rem; border: 2px solid #000; border-radius: 20px; box-shadow: 10px 10px 0px #000; margin-bottom: 5rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 1.5rem; font-size: 1.3rem; font-weight: 800;">📦 새로운 공동구매 등록</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 8px;">재료 이름</label>
+                        <input type="text" id="gb-item" placeholder="예: 삼원특수지 롤지" style="width: 100%; padding: 12px; border: 1px solid #eee; background: #f9f9f9; border-radius: 8px;">
                     </div>
-                `).join('')}
-                <div id="map-labels-container">
-                    ${SITE_DATA.spots.map(s => `
-                        <div class="map-label" style="left: ${s.coords.x}%; top: ${s.coords.y}%;" title="${s.note}">
-                            ${s.name}
-                        </div>
-                    `).join('')}
+                    <div class="form-group">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 8px;">희망 가격</label>
+                        <input type="text" id="gb-price" placeholder="예: 12,000원" style="width: 100%; padding: 12px; border: 1px solid #eee; background: #f9f9f9; border-radius: 8px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 8px;">최소 참여 인원</label>
+                        <input type="number" id="gb-min" placeholder="5" style="width: 100%; padding: 12px; border: 1px solid #eee; background: #f9f9f9; border-radius: 8px;">
+                    </div>
                 </div>
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 800; margin-bottom: 8px;">카카오톡 오픈채팅 링크</label>
+                    <input type="text" id="gb-link" placeholder="https://open.kakao.com/o/..." style="width: 100%; padding: 12px; border: 1px solid #eee; background: #f9f9f9; border-radius: 8px;">
+                </div>
+                <button class="btn-tag active" onclick="window.addGroupBuy()" style="width: 100%; background: #000; color: #fff; padding: 15px; font-weight: 800; border-radius: 12px; cursor: pointer; font-size: 1rem; transition: transform 0.2s;">공동구매 글 올리기</button>
             </div>
 
-            <div class="section-container">
-                <div class="grid" id="spots-grid">
-                    ${SITE_DATA.spots.map(s => `
-                        <div class="card" style="--shadow-color: ${picker.getNext()}">
-                            <span class="card-tag" style="background: ${picker.getNext()}">${s.category}</span>
-                            <h3>${s.name}</h3>
-                            <p>${s.location} | ${s.note}</p>
+            <!-- 공동구매 리스트 -->
+            <div class="grid">
+                ${SITE_DATA.groupBuys.map(gb => {
+                    const progress = Math.min((gb.currentParticipants / gb.minParticipants) * 100, 100);
+                    const isFull = gb.currentParticipants >= gb.minParticipants;
+                    const shadowColor = picker.getNext();
+                    
+                    return `
+                        <div class="card groupbuy-card" style="--shadow-color: ${shadowColor}; padding: 2rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+                                <span class="card-tag" style="background: ${isFull ? '#000' : shadowColor}; color: ${isFull ? '#fff' : '#000'}">
+                                    ${isFull ? '모집 완료' : '모집 중'}
+                                </span>
+                                <span style="font-weight: 800; font-size: 1.1rem; color: #FF3E00;">${gb.targetPrice}</span>
+                            </div>
+                            <h3 style="font-size: 1.4rem; margin-bottom: 1rem; line-height: 1.3;">${gb.itemName}</h3>
+                            
+                            <!-- 참여 현황 -->
+                            <div style="margin: 2rem 0;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 800; margin-bottom: 10px;">
+                                    <span>참여 현황</span>
+                                    <span>${gb.currentParticipants}/${gb.minParticipants}명</span>
+                                </div>
+                                <div style="width: 100%; height: 12px; background: #eee; border-radius: 6px; overflow: hidden;">
+                                    <div style="width: ${progress}%; height: 100%; background: ${shadowColor}; transition: width 0.5s ease-out;"></div>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-tag active" onclick="window.open('${gb.chatLink}', '_blank')" style="width: 100%; background: #FEE500; color: #000; border: none; padding: 12px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">💬</span> 오픈채팅 참여하기
+                            </button>
                         </div>
-                    `).join('')}
-                    <div class="add-card" onclick="window.openSpotModal()">
-                        <div class="plus-icon">+</div>
-                        <span>ADD NEW SPOT</span>
-                    </div>
-                </div>
+                    `;
+                }).join('')}
             </div>
         `;
         app.appendChild(section);
     }
 
-    // 모달 관리 함수
-    window.openSpotModal = () => {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.id = 'spot-modal';
-        modal.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-close" onclick="window.closeSpotModal()">&times;</div>
-                <h2 class="display-title" style="font-size: 1.5rem; margin-bottom: 2rem;">New Spot / 등록</h2>
-                <form id="spot-form">
-                    <div class="form-group"><label>장소 명칭</label><input type="text" name="name" required></div>
-                    <div class="form-group">
-                        <label>카테고리</label>
-                        <select name="category">
-                            <option>재료상가</option><option>인쇄출력</option><option>디자인서점</option><option>전시/복합공간</option><option>작업실</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>지역</label><input type="text" name="location" required></div>
-                    <div class="form-group"><label>메모/팁</label><textarea name="note" rows="3" required></textarea></div>
-                    <button type="submit" class="btn-submit">등록 완료</button>
-                </form>
-            </div>
-        `;
-        document.body.appendChild(modal);
+    window.addGroupBuy = () => {
+        const item = document.getElementById('gb-item').value;
+        const price = document.getElementById('gb-price').value;
+        const min = document.getElementById('gb-min').value;
+        const link = document.getElementById('gb-link').value;
 
-        document.getElementById('spot-form').onsubmit = (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            SITE_DATA.spots.push({
-                id: SITE_DATA.spots.length + 1,
-                name: formData.get('name'),
-                category: formData.get('category'),
-                location: formData.get('location'),
-                note: formData.get('note'),
-                coords: { x: 50, y: 50 }
-            });
-            window.closeSpotModal();
-            renderSeoulSpots();
-            alert('새로운 디자인 스팟이 등록되었습니다!');
+        if (!item || !price || !min || !link) {
+            alert('모든 정보를 입력해주세요!');
+            return;
+        }
+
+        const newEntry = {
+            id: Date.now(),
+            itemName: item,
+            targetPrice: price.includes('원') ? price : `${price}원`,
+            minParticipants: parseInt(min),
+            currentParticipants: 1, 
+            chatLink: link,
+            status: "모집 중"
         };
-    };
 
-    window.closeSpotModal = () => {
-        const modal = document.getElementById('spot-modal');
-        if (modal) modal.remove();
+        SITE_DATA.groupBuys.unshift(newEntry);
+        app.innerHTML = '';
+        renderGroupBuy();
+        alert('공동구매 글이 성공적으로 등록되었습니다!');
     };
 
     function renderDetail(combinedId) {
