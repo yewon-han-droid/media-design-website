@@ -19,36 +19,33 @@ const SITE_DATA = {
     materials: [
         {
             id: 1,
-            title: "5mm 폼보드 급하게 구합니다",
-            item: "폼보드",
-            type: "구매",
-            location: "국민대 조형관 1층",
+            title: "아크릴 물감 화이트 대용량 구함",
+            item: "물감",
+            category: "페인팅",
             urgency: "매우 급함",
+            location: "홍문관 앞",
             author: "김디자인",
-            date: "10분 전",
-            isExample: true
+            date: "10분 전"
         },
         {
             id: 2,
-            title: "3M 스프레이 77 남은 거 나눔해요",
-            item: "스프레이",
-            type: "나눔",
-            location: "상수역 1번 출구",
-            urgency: "이번 주 필요",
-            author: "이열정",
-            date: "1시간 전",
-            isExample: true
+            title: "우드락 커터기 오늘만 빌려주실 분",
+            item: "커터기",
+            category: "모형 제작",
+            urgency: "오늘 필요",
+            location: "조형관 2층",
+            author: "박생존",
+            date: "1시간 전"
         },
         {
             id: 3,
-            title: "중형 커팅매트 하루만 빌려주실 분?",
-            item: "커팅매트",
-            type: "빌리기",
-            location: "정릉역 2번 출구",
-            urgency: "오늘 필요",
-            author: "박생존",
-            date: "2시간 전",
-            isExample: true
+            title: "실크스크린용 망사 자투리 나눔",
+            item: "망사",
+            category: "실크스크린",
+            urgency: "이번 주 필요",
+            location: "실크스크린실",
+            author: "이열정",
+            date: "2시간 전"
         }
     ],
 

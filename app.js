@@ -145,6 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         app.appendChild(section);
     }
 
+    // 전역 상태 (재료 페이지 필터링 등)
+    let currentCategory = '전체';
+
     function renderMaterial() {
         const picker = new ColorPicker(SITE_DATA.colors);
         const section = document.createElement('section');
@@ -158,7 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let columnsHtml = '';
         urgencies.forEach(urg => {
-            const filtered = SITE_DATA.materials.filter(m => m.urgency === urg.label);
+            const filtered = SITE_DATA.materials.filter(m => 
+                (currentCategory === '전체' || m.category === currentCategory) && 
+                m.urgency === urg.label
+            );
+
             columnsHtml += `
                 <div class="urgency-column">
                     <div class="urgency-header">
@@ -167,32 +174,42 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     ${filtered.map(m => `
                         <div class="card urgency-${urg.key}" onclick="location.hash='#detail/material-${m.id}'" style="--shadow-color: ${picker.getNext()}">
-                            <div style="display: flex; gap: 5px; margin-bottom: 1rem;">
-                                <span class="card-tag urgency-fill" style="margin-bottom: 0;">${urg.label}</span>
-                                ${m.isExample ? `<span class="card-tag example-tag" style="margin-bottom: 0;">예시</span>` : ''}
-                            </div>
+                            <span class="card-tag" style="background: var(--accent-1); margin-bottom: 0.5rem; font-size: 0.6rem;">${m.category}</span>
                             <h3>${m.title}</h3>
-                            <p><strong>재료:</strong> ${m.item} | <strong>지역:</strong> ${m.location}</p>
+                            <p><strong>재료:</strong> ${m.item} | <strong>위치:</strong> ${m.location}</p>
                             <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">${m.author} · ${m.date}</div>
                         </div>
                     `).join('')}
-                    <div class="add-card" onclick="alert('${urg.label} 게시글 추가 화면으로 이동합니다.')">
+                    <div class="add-card" onclick="alert('${currentCategory} - ${urg.label} 게시글 추가 화면 준비 중')">
                         <div class="plus-icon">+</div>
-                        <div style="font-size: 0.8rem; font-weight: 700;">POST NEW</div>
+                        <div style="font-size: 0.7rem; font-weight: 700;">POST IN ${urg.key.toUpperCase()}</div>
                     </div>
                 </div>
             `;
         });
 
         section.innerHTML = `
-            <h2 class="display-title">Material / 재료 급구</h2>
-            <p>미대생의 생존은 속도전입니다. 근처의 남는 재료를 찾으세요.</p>
-            <div class="materials-board">
+            <h2 class="display-title">Material / 재료 구하기</h2>
+            <p>전공별 작업 유형을 선택하고 긴급도에 맞춰 필요한 재료를 찾으세요.</p>
+            
+            <!-- 1단계 상위 카테고리 -->
+            <div class="category-tabs" style="margin-top: 2rem;">
+                ${['전체', '페인팅', '모형 제작', '실크스크린', '사진', '의상 제작'].map(c => `
+                    <button class="tab-btn ${currentCategory === c ? 'active' : ''}" onclick="window.setCategory('${c}')">${c}</button>
+                `).join('')}
+            </div>
+
+            <div class="materials-board" style="margin-top: 3rem;">
                 ${columnsHtml}
             </div>
         `;
         app.appendChild(section);
     }
+
+    window.setCategory = (cat) => {
+        currentCategory = cat;
+        renderMaterial();
+    };
 
     function renderFeedback() {
         const picker = new ColorPicker(SITE_DATA.colors);
