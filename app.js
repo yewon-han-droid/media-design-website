@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 전역 상태 (재료 페이지 필터링 등)
     let currentCategory = '전체';
+    let currentUrgency = '전체';
 
     function renderMaterial() {
         const picker = new ColorPicker(SITE_DATA.colors);
@@ -159,38 +160,60 @@ document.addEventListener('DOMContentLoaded', () => {
             { label: '이번 주 필요', key: 'low' }
         ];
 
-        let columnsHtml = '';
-        urgencies.forEach(urg => {
-            const filtered = SITE_DATA.materials.filter(m => 
-                (currentCategory === '전체' || m.category === currentCategory) && 
-                m.urgency === urg.label
-            );
+        // 필터링 로직
+        const filteredMaterials = SITE_DATA.materials.filter(m => 
+            (currentCategory === '전체' || m.category === currentCategory) && 
+            (currentUrgency === '전체' || m.urgency === currentUrgency)
+        );
 
-            columnsHtml += `
-                <div class="urgency-column">
-                    <div class="urgency-header">
-                        <span>${urg.label}</span>
-                        <span style="opacity: 0.5;">${filtered.length} Items</span>
+        let boardHtml = '';
+        if (currentCategory === '전체') {
+            // 초기 전체 화면: 3컬럼 레이아웃 유지
+            let columnsHtml = '';
+            urgencies.forEach(urg => {
+                const colFiltered = filteredMaterials.filter(m => m.urgency === urg.label);
+                columnsHtml += `
+                    <div class="urgency-column">
+                        <div class="urgency-header">
+                            <span>${urg.label}</span>
+                            <span style="opacity: 0.5;">${colFiltered.length}</span>
+                        </div>
+                        ${colFiltered.map(m => `
+                            <div class="card urgency-${urg.key}" onclick="location.hash='#detail/material-${m.id}'" style="--shadow-color: ${picker.getNext()}">
+                                <span class="card-tag" style="background: var(--accent-1); margin-bottom: 0.5rem; font-size: 0.6rem;">${m.category}</span>
+                                <h3>${m.title}</h3>
+                                <p><strong>재료:</strong> ${m.item} | <strong>위치:</strong> ${m.location}</p>
+                            </div>
+                        `).join('')}
                     </div>
-                    ${filtered.map(m => `
-                        <div class="card urgency-${urg.key}" onclick="location.hash='#detail/material-${m.id}'" style="--shadow-color: ${picker.getNext()}">
-                            <span class="card-tag" style="background: var(--accent-1); margin-bottom: 0.5rem; font-size: 0.6rem;">${m.category}</span>
+                `;
+            });
+            boardHtml = `<div class="materials-board" style="margin-top: 2rem;">${columnsHtml}</div>`;
+        } else {
+            // 카테고리 선택 시: 2단계 필터 노출 및 단일 리스트 형태 (또는 강조된 뷰)
+            boardHtml = `
+                <div class="sub-category-tabs" style="margin-top: 1.5rem; animation: slideDown 0.3s ease-out;">
+                    <span style="font-size: 0.8rem; font-weight: 800; margin-right: 15px; color: #888;">긴급도:</span>
+                    ${['전체', '매우 급함', '오늘 필요', '이번 주 필요'].map(u => `
+                        <button class="sub-tab-btn ${currentUrgency === u ? 'active' : ''}" onclick="window.setUrgency('${u}')">${u}</button>
+                    `).join('')}
+                </div>
+                <div class="grid" style="margin-top: 3rem;">
+                    ${filteredMaterials.length > 0 ? filteredMaterials.map(m => `
+                        <div class="card urgency-${urgencies.find(u => u.label === m.urgency).key}" onclick="location.hash='#detail/material-${m.id}'" style="--shadow-color: ${picker.getNext()}">
+                            <span class="card-tag">${m.urgency}</span>
                             <h3>${m.title}</h3>
                             <p><strong>재료:</strong> ${m.item} | <strong>위치:</strong> ${m.location}</p>
                             <div style="margin-top: 1rem; font-size: 0.8rem; color: #888;">${m.author} · ${m.date}</div>
                         </div>
-                    `).join('')}
-                    <div class="add-card" onclick="alert('${currentCategory} - ${urg.label} 게시글 추가 화면 준비 중')">
-                        <div class="plus-icon">+</div>
-                        <div style="font-size: 0.7rem; font-weight: 700;">POST IN ${urg.key.toUpperCase()}</div>
-                    </div>
+                    `).join('') : '<p style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #888;">해당하는 게시글이 없습니다.</p>'}
                 </div>
             `;
-        });
+        }
 
         section.innerHTML = `
             <h2 class="display-title">Material / 재료 구하기</h2>
-            <p>전공별 작업 유형을 선택하고 긴급도에 맞춰 필요한 재료를 찾으세요.</p>
+            <p>1단계 작업 유형을 선택하면 2단계 긴급도 필터가 나타납니다.</p>
             
             <!-- 1단계 상위 카테고리 -->
             <div class="category-tabs" style="margin-top: 2rem;">
@@ -199,15 +222,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 `).join('')}
             </div>
 
-            <div class="materials-board" style="margin-top: 3rem;">
-                ${columnsHtml}
-            </div>
+            ${boardHtml}
         `;
+        app.innerHTML = ''; // 기존 콘텐츠를 비우고 새로 렌더링 (중첩 방지)
         app.appendChild(section);
     }
 
     window.setCategory = (cat) => {
         currentCategory = cat;
+        currentUrgency = '전체'; // 카테고리 변경 시 긴급도 초기화
+        renderMaterial();
+    };
+
+    window.setUrgency = (urg) => {
+        currentUrgency = urg;
         renderMaterial();
     };
 
