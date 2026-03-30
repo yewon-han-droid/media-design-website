@@ -6,8 +6,8 @@
 const SITE_DATA = {
     // 홈 화면 메인 텍스트
     hero: {
-        title: "서울 미대생의\n작업 생존 플랫폼",
-        description: "작업 중 필요한 것들을 빠르게 찾고, 묻고, 참고할 수 있는 시각디자인 전공자 전용 커뮤니티형 플랫폼입니다.",
+        title: "국민대 조형대를 위한\n재료 생존 지도",
+        description: "작업 중 필요한 것들을 빠르게 찾고, 묻고, 참고할 수 있는 미대생 전용 생존 큐레이션 플랫폼입니다.",
         features: [
             { id: 1, title: "재료 구하기", desc: "작업 유형별로 급하게 필요한 재료를 찾으세요." },
             { id: 2, title: "가격 비교", desc: "화방별 재료 가격을 비교하고 최저가를 공유하세요." },
@@ -23,7 +23,7 @@ const SITE_DATA = {
             item: "물감",
             category: "페인팅",
             urgency: "매우 급함",
-            location: "홍문관 앞",
+            location: "북악관 앞",
             author: "김디자인",
             date: "10분 전"
         },
@@ -46,65 +46,6 @@ const SITE_DATA = {
             location: "실크스크린실",
             author: "이열정",
             date: "2시간 전"
-        }
-    ],
-
-    // 재료별 가격 비교 데이터 (Price Comparison)
-    priceComparisons: [
-        {
-            id: 1,
-            itemName: "신한 아크릴 물감 50ml",
-            price: "4,500원",
-            storeName: "호미화방 (홍대)",
-            hasReceipt: true,
-            date: "2024.03.20"
-        },
-        {
-            id: 2,
-            itemName: "신한 아크릴 물감 50ml",
-            price: "4,200원",
-            storeName: "미림화방 (신촌)",
-            hasReceipt: true,
-            date: "2024.03.21"
-        },
-        {
-            id: 3,
-            itemName: "폼보드 5T A1",
-            price: "3,800원",
-            storeName: "삼원특수지 (혜화)",
-            hasReceipt: false,
-            date: "2024.03.18"
-        }
-    ],
-
-    // 공동구매 데이터 (Group Buy)
-    groupBuys: [
-        {
-            id: 1,
-            itemName: "신한 전문가용 과슈 24색",
-            targetPrice: "45,000원",
-            minParticipants: 10,
-            currentParticipants: 7,
-            chatLink: "https://open.kakao.com/o/g123456",
-            status: "모집 중"
-        },
-        {
-            id: 2,
-            itemName: "삼원특수지 롤지 (화이트)",
-            targetPrice: "12,000원",
-            minParticipants: 5,
-            currentParticipants: 3,
-            chatLink: "https://open.kakao.com/o/g789012",
-            status: "모집 중"
-        },
-        {
-            id: 3,
-            itemName: "아크릴 판 3mm 900x600",
-            targetPrice: "8,500원",
-            minParticipants: 20,
-            currentParticipants: 20,
-            chatLink: "https://open.kakao.com/o/g345678",
-            status: "모집 완료"
         }
     ],
 
