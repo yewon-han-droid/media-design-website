@@ -298,6 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div style="width:12px; height:12px; background:#7FFF00; border:1px solid #fff; border-radius:50%;"></div> 기타/공통
                             </div>
                         </div>
+                        <button class="btn-return-home" onclick="window.closeMapOverlay()">홈화면으로 돌아가기</button>
                     </div>
                 </div>
             `;

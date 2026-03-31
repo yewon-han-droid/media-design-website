@@ -1280,3 +1280,28 @@ main {
 .map-close:hover {
     color: #FF3E00;
 }
+
+.btn-return-home {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #00F0FF;
+    color: #000;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    border-radius: 40px;
+    cursor: pointer;
+    z-index: 9999 !important;
+    box-shadow: 0 4px 15px rgba(0,240,255,0.4);
+    transition: all 0.2s;
+}
+
+.btn-return-home:hover {
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,240,255,0.6);
+    background: #FF3E00;
+    color: #fff;
+}
